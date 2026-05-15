@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>행정학 기출 분류표</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f8f8;color:#1a1a1a;}
+.pg{display:none;flex-direction:column;min-height:100vh;}
+.pg.on{display:flex;}
+#p1{height:100vh;}
+.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;height:100%;}
+.cell{display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:filter .15s;padding:32px;gap:8px;position:relative;border:.5px solid rgba(0,0,0,.08);}
+.cell:hover{filter:brightness(.95);}
+.cn{font-size:12px;font-weight:500;opacity:.5;}
+.ct{font-size:28px;font-weight:600;}
+.cs{font-size:13px;opacity:.45;font-style:italic;text-align:center;}
+.ca{position:absolute;bottom:14px;right:16px;font-size:14px;opacity:.2;}
+.c1{background:#FDEBD0;color:#7D4A1A;}
+.c2{background:#D5EEE8;color:#1A5C4A;}
+.c3{background:#FEFBD0;color:#6B6200;}
+.c4{background:#DFF2D0;color:#2A5C1A;}
+.hdr{display:flex;align-items:center;padding:10px 16px;border-bottom:.5px solid #e5e5e5;background:#fff;position:sticky;top:0;z-index:10;}
+.back{background:none;border:.5px solid #ddd;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;color:#555;display:flex;align-items:center;gap:3px;flex-shrink:0;margin-right:8px;}
+.back:hover{background:#f5f5f5;}
+.badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:100px;flex-shrink:0;}
+.harrow{font-size:13px;color:#bbb;margin:0 6px;}
+.hnav{display:flex;align-items:center;overflow-x:auto;flex:1;gap:0;}
+.hnav::-webkit-scrollbar{display:none;}
+.hsec{font-size:12px;font-weight:500;cursor:pointer;padding:3px 8px;border-radius:6px;white-space:nowrap;color:#666;}
+.hsec:hover{background:#f5f5f5;}
+.hdiv{font-size:13px;color:#ddd;padding:0 2px;}
+.ebtn{font-size:12px;padding:5px 12px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:4px;border:.5px solid #ddd;background:transparent;color:#555;margin-left:8px;flex-shrink:0;}
+.ebtn.on{background:#1a1a1a;color:#fff;border-color:transparent;}
+.hint{font-size:11px;color:#999;padding:5px 16px;display:none;background:#fafafa;border-bottom:.5px solid #eee;}
+.edit-mode .hint{display:block;}
+.tw{overflow-y:auto;flex:1;background:#fff;}
+.sb{padding:0 0 4px;}
+.sh{display:flex;align-items:center;gap:8px;padding:12px 16px 5px;}
+.sl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.acb{font-size:11px;padding:3px 8px;border-radius:6px;cursor:pointer;border:.5px dashed #ddd;background:transparent;color:#999;display:none;align-items:center;gap:2px;margin-left:auto;}
+.edit-mode .acb{display:flex;}
+.sd{height:.5px;background:#eee;margin:4px 0;}
+table{border-collapse:collapse;font-size:12px;width:100%;}
+th,td{border:.5px solid #e5e5e5;}
+.ty{width:48px;min-width:48px;text-align:center;font-weight:600;font-size:11px;color:#888;padding:8px 4px;background:#fafafa;}
+.tc{min-width:100px;padding:0;vertical-align:top;position:relative;}
+.cl-wrap{padding:5px 6px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.cl{text-align:center;font-size:11.5px;font-weight:600;line-height:1.4;word-break:keep-all;min-height:28px;outline:none;width:100%;}
+.cl[contenteditable="true"]{cursor:text;background:rgba(255,255,255,0.6);}
+.col-acts{display:flex;align-items:center;gap:3px;justify-content:center;}
+.lbtn{font-size:10px;padding:2px 5px;border-radius:4px;border:.5px solid #ddd;background:transparent;cursor:pointer;display:none;align-items:center;gap:2px;color:#999;}
+.lbtn:hover{background:#f5f5f5;}
+.lbtn.has-link{color:#1D4ED8;border-color:#93C5FD;background:#EFF6FF;}
+.edit-mode .lbtn{display:inline-flex;}
+.dcb{font-size:10px;padding:2px 5px;border-radius:4px;border:.5px solid #ddd;background:transparent;cursor:pointer;display:none;align-items:center;color:#999;}
+.dcb:hover{color:rgba(200,0,0,0.8);}
+.edit-mode .dcb{display:inline-flex;}
+.col-lb{font-size:10px;padding:2px 6px 4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;display:none;opacity:.6;}
+.col-lb.show{display:block;}
+.ry{text-align:center;font-size:11px;font-weight:600;color:#888;padding:6px 4px;background:#fafafa;white-space:nowrap;}
+.rc{padding:5px;vertical-align:middle;text-align:center;min-height:34px;cursor:pointer;}
+.rc.dh{background:rgba(55,138,221,.1);}
+.sw{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;align-items:center;}
+.sym{width:16px;height:16px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;cursor:pointer;}
+.sym:hover .tip{display:block;}
+.sym.sel{outline:2px solid #378ADD;outline-offset:1px;}
+.sym.has-own-link{outline:1px dashed #F59E0B;outline-offset:1px;}
+.tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;font-size:11px;padding:4px 8px;border-radius:5px;white-space:nowrap;z-index:999;pointer-events:none;line-height:1.4;min-width:80px;text-align:center;}
+.tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1a1a1a;}
+.dsb{background:rgba(0,0,0,0.5);border:none;color:white;font-size:9px;cursor:pointer;display:none;position:absolute;top:-3px;right:-3px;border-radius:50%;width:11px;height:11px;align-items:center;justify-content:center;padding:0;}
+.edit-mode .dsb{display:flex;}
+.sym-link-btn{display:none;position:absolute;bottom:-3px;right:-3px;background:#1D4ED8;border:none;color:white;font-size:8px;cursor:pointer;border-radius:50%;width:11px;height:11px;align-items:center;justify-content:center;padding:0;}
+.edit-mode .sym-link-btn{display:flex;}
+.asb{width:16px;height:16px;border-radius:3px;border:.5px dashed #ddd;background:transparent;cursor:pointer;font-size:11px;color:#bbb;display:none;align-items:center;justify-content:center;}
+.edit-mode .asb{display:inline-flex;}
+.ayb{font-size:11px;color:#bbb;background:none;border:.5px dashed #ddd;border-radius:6px;padding:3px 10px;cursor:pointer;margin:6px;display:none;align-items:center;gap:3px;}
+.edit-mode .ayb{display:inline-flex;}
+</style>
+</head>
+<body>
+
+<div class="pg on" id="p1">
+  <div class="grid">
+    <div class="cell c1" data-cat="0"><span class="cn">1</span><span class="ct">배경</span><span class="cs">K드라마로 보는 행정학 변화</span><i class="ti ti-chevron-right ca"></i></div>
+    <div class="cell c3" data-cat="2"><span class="cn">3</span><span class="ct">ㅈㅊ</span><span class="cs">정책</span><i class="ti ti-chevron-right ca"></i></div>
+    <div class="cell c2" data-cat="1"><span class="cn">2</span><span class="ct">ㅇㅅ</span><span class="cs">인사 · 예산 · 조직</span><i class="ti ti-chevron-right ca"></i></div>
+    <div class="cell c4" data-cat="3"><span class="cn">4</span><span class="ct">SVC</span><span class="cs">행정서비스 이론 · 현행 제도</span><i class="ti ti-chevron-right ca"></i></div>
+  </div>
+</div>
+
+<div class="pg" id="p2">
+  <div class="hdr">
+    <button class="back" id="backBtn"><i class="ti ti-arrow-left"></i> 뒤로</button>
+    <span class="badge" id="p2b"></span>
+    <span class="harrow">>></span>
+    <div class="hnav" id="hnav"></div>
+    <button class="ebtn" id="ebt"><i class="ti ti-edit"></i> 편집</button>
+  </div>
+  <div class="hint">💡 열 🔗: 열 전체 링크 / ■ 하단 파란점: 그 칸만 개별 링크 / 개별링크 없으면 열 링크 따라옴</div>
+  <div class="tw" id="tw"></div>
+</div>
+
+<script>
+var STORAGE_KEY='admin_study_cats_v1';
+var CC=[
+  {bg:'#EFF6FF',text:'#1D4ED8',sym:'#1D4ED8'},{bg:'#F0FDF4',text:'#15803D',sym:'#15803D'},
+  {bg:'#FFF7ED',text:'#C2410C',sym:'#C2410C'},{bg:'#FDF4FF',text:'#7E22CE',sym:'#7E22CE'},
+  {bg:'#ECFDF5',text:'#0F766E',sym:'#0F766E'},{bg:'#FFF1F2',text:'#BE123C',sym:'#BE123C'},
+  {bg:'#FFFBEB',text:'#B45309',sym:'#B45309'},{bg:'#F0F9FF',text:'#0369A1',sym:'#0369A1'}
+];
+var DEFAULT_CATS=[
+  {label:'1. 배경',color:'#FDEBD0',textColor:'#7D4A1A',sections:[
+    {id:'bg0',icon:'📜',label:'시대별 학파',sc:'#1e3a8a',
+      cols:[{n:'전통행정학',url:''},{n:'과학적관리론·행태론',url:''},{n:'신행정론',url:''},{n:'공공선택이론',url:''},{n:'신공공관리론',url:''},{n:'뉴거버넌스·NPS',url:''},{n:'규제합리화',url:''}],
+      years:[
+        {y:"25'",cells:[[],[],[],['공공선택이론 기본가정'],['NPM 시장성테스트','공직봉사동기(PSM)'],['뉴거버넌스'],[]]},
+        {y:"24'",cells:[[],['행정이론-이념 연결'],[],['외부효과'],['오스본·게블러 NPM비교'],['행정학 패러다임'],[]]},
+        {y:"23'",cells:[[],[],['행정학 패러다임'],['공익 실체설·과정설'],['행정학 패러다임'],['뉴거버넌스·신행정학'],[]]},
+        {y:"22'",cells:[[],[],[],[],['신공공서비스론'],['신공공서비스론'],[]]},
+      ]},
+    {id:'bg1',icon:'🗼',label:'등대',sc:'#5B21B6',
+      cols:[{n:'행정가치·이념',url:''},{n:'리더십',url:''},{n:'행정학 성격·접근',url:''}],
+      years:[
+        {y:"25'",cells:[['행정의 가치'],['거래적·변혁적 리더십'],['접근방법','행정학 성격']]},
+        {y:"24'",cells:[[],[],['행태론적 접근방법','신제도주의']]},
+        {y:"23'",cells:[[],[],['행태론적 접근방법','신제도주의']]},
+        {y:"22'",cells:[[],[],['신제도주의론','행태주의']]},
+      ]},
+    {id:'bg2',icon:'💡',label:'알쓸신잡',sc:'#0369A1',
+      cols:[{n:'재정학',url:''},{n:'학자·이론가',url:''}],
+      years:[
+        {y:"25'",cells:[[],[]]},
+        {y:"24'",cells:[['외부효과','정부실패이론'],['관리과학']]},
+        {y:"23'",cells:[['시장실패·정부실패'],['동기부여이론','시뮬레이션·미래예측기법']]},
+        {y:"22'",cells:[['지방재정조정제도'],['능률성·효과성']]},
+      ]},
+  ]},
+  {label:'2. ㅇㅅ',color:'#D5EEE8',textColor:'#1A5C4A',sections:[
+    {id:'os0',icon:'🏢',label:'Organization',sc:'#065f46',
+      cols:[{n:'조직구조 유형',url:''},{n:'조직과정·변동',url:''},{n:'조직문화·갈등',url:''}],
+      years:[
+        {y:"25'",cells:[['대프트 조직구조 유형'],[],[]]},
+        {y:"24'",cells:[['현대조직이론'],[],[]]},
+        {y:"23'",cells:[['기계적·유기적 구조','조직구조 설계 요소'],['학습조직'],[]]},
+        {y:"22'",cells:[['기계적 조직·학습조직 비교'],['분권화 요구 상황'],[]]},
+      ]},
+    {id:'os1',icon:'👤',label:'인사',sc:'#1A5C4A',
+      cols:[{n:'직위분류제·계급제',url:''},{n:'임용·승진·평가',url:''},{n:'교육훈련',url:''},{n:'윤리·행동규범',url:''}],
+      years:[
+        {y:"25'",cells:[['직위분류제'],['채용시험 효용성'],['감수성훈련'],['이해충돌','행동규범']]},
+        {y:"24'",cells:[[],['중앙인사기관','경력직공무원'],['교육훈련 이용권'],['공직자윤리법']]},
+        {y:"23'",cells:[['직위분류제·직군·직렬'],['근무성적평정','국가공무원법 징계'],['감수성훈련'],['정부실패']]},
+        {y:"22'",cells:[['직업공무원제','고위공무원단'],['근무성적평가 대상'],['행정개혁 행태적접근'],['이해충돌방지법']]},
+      ]},
+    {id:'os2',icon:'💰',label:'예산',sc:'#92400e',
+      cols:[{n:'예산원칙·종류',url:''},{n:'예산과정·절차',url:''},{n:'예산제도·개혁',url:''}],
+      years:[
+        {y:"25'",cells:[[],['국가재정법'],['점증주의 예산','예산제도']]},
+        {y:"24'",cells:[['예산원칙과 예외'],['이용·전용·이체·이월'],['성과주의예산']]},
+        {y:"23'",cells:[['예산 내용 분류방법'],['재정사업자율평가'],['전통적·현대적 예산원칙']]},
+        {y:"22'",cells:[['예산안 구성요소'],['국회 예산결산'],['예산제도']]},
+      ]},
+  ]},
+  {label:'3. ㅈㅊ',color:'#FEFBD0',textColor:'#6B6200',sections:[
+    {id:'jp0',icon:'⏮',label:'Pre',sc:'#6B6200',
+      cols:[{n:'의제설정 모형',url:''},{n:'정책문제 구조화',url:''}],
+      years:[
+        {y:"25'",cells:[['콥&엘더 의제설정'],[]]},
+        {y:"24'",cells:[[],[]]},{y:"23'",cells:[[],[]]},
+        {y:"22'",cells:[['정책의제 설정 영향요인'],[]]},
+      ]},
+    {id:'jp1',icon:'⚙️',label:'Production',sc:'#b45309',
+      cols:[{n:'정책결정모형',url:''},{n:'정책집행론',url:''}],
+      years:[
+        {y:"25'",cells:[['정책결정모형'],['상향식 집행론']]},
+        {y:"24'",cells:[['정책결정모형'],['하향적 접근방법']]},
+        {y:"23'",cells:[[],['나카무라·스몰우드']]},
+        {y:"22'",cells:[['정책결정모형'],['나카무라·스몰우드','하향적 접근방법']]},
+      ]},
+    {id:'jp2',icon:'⏭',label:'Post',sc:'#92400e',
+      cols:[{n:'정책평가',url:''},{n:'정책변동',url:''},{n:'행정개혁',url:''}],
+      years:[
+        {y:"25'",cells:[[],[],[]]},{y:"24'",cells:[[],[],[]]},
+        {y:"23'",cells:[[],[],['행정개혁 저항 극복','행정개혁 구조적 접근']]},
+        {y:"22'",cells:[[],[],['행정개혁 저항 극복','행정개혁 구조적 접근']]},
+      ]},
+    {id:'jp3',icon:'🤝',label:'참여자',sc:'#3B3200',
+      cols:[{n:'다원주의·이익집단',url:''},{n:'하위정부·철의삼각',url:''},{n:'정책공동체·이슈네트워크',url:''}],
+      years:[
+        {y:"25'",cells:[[],[],['정책과정 참여자']]},
+        {y:"24'",cells:[[],[],[]]},
+        {y:"23'",cells:[['무의사결정론'],[],[]]},
+        {y:"22'",cells:[['정책과정 공식적 참여자'],[],[]]},
+      ]},
+    {id:'jp4',icon:'📐',label:'정책이론',sc:'#4B5563',
+      cols:[{n:'이론모형 비교',url:''},{n:'이론·시각',url:''}],
+      years:[
+        {y:"25'",cells:[[],[]]},
+        {y:"24'",cells:[['정책결정 이론모형'],['정책이론(마르크스·엘리트·다원론)']]},
+        {y:"23'",cells:[[],[]]},{y:"22'",cells:[[],[]]},
+      ]},
+  ]},
+  {label:'4. SVC',color:'#DFF2D0',textColor:'#2A5C1A',sections:[
+    {id:'sv0',icon:'📚',label:'이론적 서비스',sc:'#14532d',
+      cols:[{n:'서비스 전달방식',url:''},{n:'민영화·민간위탁',url:''},{n:'시민참여',url:''}],
+      years:[
+        {y:"25'",cells:[['프랜차이즈'],[],[]]},
+        {y:"24'",cells:[['공공서비스 생산방식(voucher)'],[],[]]},
+        {y:"23'",cells:[[],[],[]]},
+        {y:"22'",cells:[[],[],['주민의 권리','주민소송']]},
+      ]},
+    {id:'sv1',icon:'🏛',label:'현재 정책 서비스',sc:'#2A5C1A',
+      cols:[{n:'전자정부·디지털',url:''},{n:'지방자치·지방의회',url:''},{n:'국가-지자체 관계',url:''},{n:'규제·감독·통제',url:''}],
+      years:[
+        {y:"25'",cells:[[],['지방의회 징계'],['국가-지자체 관계','보조기관'],[]]},
+        {y:"24'",cells:[['스마트전자정부'],['지방의회 권한','자치경찰제','도농통합'],['지방자치 설명'],['공식적 수단 행정통제']]},
+        {y:"23'",cells:[[],['특별지방자치단체','지방자치단체 사무배분'],['주민자치'],['행정통제 유형']]},
+        {y:"22'",cells:[['전자정부·공공행정'],['지방자치단체 유형·특징'],['중앙-지방 재정조정 형태'],['행정통제 외부통제']]},
+      ]},
+  ]},
+];
+
+// localStorage 로드
+function loadData(){
+  try{
+    var saved=localStorage.getItem(STORAGE_KEY);
+    return saved?JSON.parse(saved):JSON.parse(JSON.stringify(DEFAULT_CATS));
+  }catch(e){return JSON.parse(JSON.stringify(DEFAULT_CATS));}
+}
+function saveData(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(cats));}catch(e){}
+}
+
+var cats=loadData();
+var cur=0,editMode=false,sel=null,selSec=null;
+
+function chipLabel(c){return typeof c==='string'?c:c.l;}
+function chipUrl(c){return typeof c==='string'?'':c.url||'';}
+function setChipUrl(sec,yi,ci,ki,url){
+  var chip=sec.years[yi].cells[ci][ki];
+  var l=chipLabel(chip);
+  sec.years[yi].cells[ci][ki]=url?{l:l,url:url}:l;
+}
+function resolveUrl(sec,ci,chip){
+  var own=chipUrl(chip);
+  return own||sec.cols[ci].url||'';
+}
+
+function go(p){
+  document.querySelectorAll('.pg').forEach(function(x){x.classList.remove('on');});
+  document.getElementById('p'+p).classList.add('on');
+  if(p===1){editMode=false;sel=null;selSec=null;}
+}
+function goCat(i){cur=i;renderP2();go(2);}
+function toggleEdit(){editMode=!editMode;sel=null;selSec=null;renderP2();}
+function scrollSec(si){var el=document.getElementById('sec-'+cats[cur].sections[si].id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+
+function setColLink(si,ci){
+  var col=cats[cur].sections[si].cols[ci];
+  var url=prompt('열 전체 링크 (비우면 삭제)',col.url||'');
+  if(url===null)return;
+  col.url=url.trim();
+  saveData();renderP2();
+}
+function setSymLink(si,yi,ci,ki){
+  var sec=cats[cur].sections[si];
+  var chip=sec.years[yi].cells[ci][ki];
+  var cur_url=chipUrl(chip);
+  var colUrl=sec.cols[ci].url||'';
+  var msg='이 칸 개별 링크\n(비우면 열 링크 사용'+(colUrl?' → '+colUrl.substring(0,30):'')+')\n현재: '+(cur_url||'없음');
+  var url=prompt(msg,cur_url);
+  if(url===null)return;
+  setChipUrl(sec,yi,ci,ki,url.trim());
+  saveData();renderP2();
+}
+function handleTdClick(si,yi,ci){
+  if(editMode){cellMove(si,yi,ci);}
+  else{var u=cats[cur].sections[si].cols[ci].url;if(u)window.open(u,'_blank');}
+}
+function handleSymClick(e,si,yi,ci,ki){
+  e.stopPropagation();
+  if(editMode){selectSym(si,yi,ci,ki);}
+  else{var sec=cats[cur].sections[si];var chip=sec.years[yi].cells[ci][ki];var u=resolveUrl(sec,ci,chip);if(u)window.open(u,'_blank');}
+}
+
+function renderHNav(){
+  var html='';
+  cats[cur].sections.forEach(function(s,si){
+    if(si>0)html+='<span class="hdiv">|</span>';
+    html+='<span class="hsec" style="color:'+s.sc+'" data-si="'+si+'">'+s.icon+' '+s.label+'</span>';
+  });
+  document.getElementById('hnav').innerHTML=html;
+  document.getElementById('hnav').querySelectorAll('.hsec').forEach(function(el){
+    el.addEventListener('click',function(){scrollSec(parseInt(this.dataset.si));});
+  });
+}
+
+function renderSec(sec,si){
+  var h='<div class="sb" id="sec-'+sec.id+'"><div class="sh"><span style="font-size:14px">'+sec.icon+'</span><span class="sl" style="color:'+sec.sc+'">'+sec.label+'</span><button class="acb" data-si="'+si+'">+ 열 추가</button></div><table><thead><tr><th class="ty"></th>';
+  sec.cols.forEach(function(col,ci){
+    var clr=CC[ci%CC.length];
+    var hl=col.url&&col.url.length>0;
+    var su=hl?col.url.replace(/https?:\/\//,'').substring(0,24)+(col.url.length>28?'…':''):'';
+    h+='<th class="tc" style="background:'+clr.bg+'"><div class="cl-wrap"><div class="cl" style="color:'+clr.text+'"'+(editMode?' contenteditable="true" data-si="'+si+'" data-ci="'+ci+'"':'')+'>'+( ci+1)+'. '+col.n+'</div>';
+    if(hl&&!editMode)h+='<div class="col-lb show" style="color:'+clr.text+'">🔗 '+su+'</div>';
+    h+='<div class="col-acts"><button class="lbtn'+(hl?' has-link':'')+'" data-si="'+si+'" data-ci="'+ci+'">🔗 '+(hl?'수정':'추가')+'</button><button class="dcb" data-si="'+si+'" data-ci="'+ci+'">✕</button></div></div></th>';
+  });
+  h+='</tr></thead><tbody>';
+  sec.years.forEach(function(row,yi){
+    h+='<tr><td class="ry">'+row.y+'</td>';
+    sec.cols.forEach(function(col,ci){
+      var clr=CC[ci%CC.length],chips=row.cells[ci]||[];
+      var isDrop=sel&&selSec===si&&!(sel.yi===yi&&sel.ci===ci);
+      h+='<td class="rc'+(isDrop&&editMode?' dh':'')+'" data-si="'+si+'" data-yi="'+yi+'" data-ci="'+ci+'"><div class="sw">';
+      chips.forEach(function(chip,ki){
+        var isSel=sel&&selSec===si&&sel.yi===yi&&sel.ci===ci&&sel.ki===ki;
+        var ownUrl=chipUrl(chip);
+        var effUrl=resolveUrl(sec,ci,chip);
+        var hasOwn=ownUrl.length>0;
+        var tipTxt=chipLabel(chip)+(effUrl&&!editMode?' 🔗':'');
+        h+='<span class="sym'+(isSel?' sel':'')+(hasOwn?' has-own-link':'')+'" style="background:'+clr.sym+'" data-si="'+si+'" data-yi="'+yi+'" data-ci="'+ci+'" data-ki="'+ki+'"><span class="tip">'+tipTxt+'</span><button class="dsb" data-si="'+si+'" data-yi="'+yi+'" data-ci="'+ci+'" data-ki="'+ki+'">✕</button><button class="sym-link-btn" data-si="'+si+'" data-yi="'+yi+'" data-ci="'+ci+'" data-ki="'+ki+'">🔗</button></span>';
+      });
+      h+='<button class="asb" data-si="'+si+'" data-yi="'+yi+'" data-ci="'+ci+'">+</button></div></td>';
+    });
+    h+='</tr>';
+  });
+  h+='<tr><td colspan="'+(sec.cols.length+1)+'" style="border:none;padding:2px 8px;"><button class="ayb" data-si="'+si+'">+ 연도 추가</button></td></tr></tbody></table></div><div class="sd"></div>';
+  return h;
+}
+
+function bindTw(){
+  var tw=document.getElementById('tw');
+  tw.querySelectorAll('.acb').forEach(function(el){el.addEventListener('click',function(){addCol(+this.dataset.si);});});
+  tw.querySelectorAll('.lbtn').forEach(function(el){el.addEventListener('click',function(){setColLink(+this.dataset.si,+this.dataset.ci);});});
+  tw.querySelectorAll('.dcb').forEach(function(el){el.addEventListener('click',function(){delCol(+this.dataset.si,+this.dataset.ci);});});
+  tw.querySelectorAll('.ayb').forEach(function(el){el.addEventListener('click',function(){addYear(+this.dataset.si);});});
+  tw.querySelectorAll('.rc').forEach(function(el){el.addEventListener('click',function(){handleTdClick(+this.dataset.si,+this.dataset.yi,+this.dataset.ci);});});
+  tw.querySelectorAll('.sym').forEach(function(el){el.addEventListener('click',function(e){handleSymClick(e,+this.dataset.si,+this.dataset.yi,+this.dataset.ci,+this.dataset.ki);});});
+  tw.querySelectorAll('.dsb').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();delChip(+this.dataset.si,+this.dataset.yi,+this.dataset.ci,+this.dataset.ki);});});
+  tw.querySelectorAll('.sym-link-btn').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();setSymLink(+this.dataset.si,+this.dataset.yi,+this.dataset.ci,+this.dataset.ki);});});
+  tw.querySelectorAll('.asb').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();addChip(+this.dataset.si,+this.dataset.yi,+this.dataset.ci);});});
+  tw.querySelectorAll('.cl[contenteditable]').forEach(function(el){el.addEventListener('blur',function(){saveCol(+this.dataset.si,+this.dataset.ci,this);});});
+}
+
+function renderP2(){
+  var c=cats[cur];
+  document.getElementById('p2b').textContent=c.label;
+  document.getElementById('p2b').style.cssText='background:'+c.color+';color:'+c.textColor+';';
+  var btn=document.getElementById('ebt');
+  btn.className='ebtn'+(editMode?' on':'');
+  btn.innerHTML=editMode?'<i class="ti ti-check"></i> 완료':'<i class="ti ti-edit"></i> 편집';
+  document.getElementById('p2').className='pg on'+(editMode?' edit-mode':'');
+  renderHNav();
+  var html='';
+  c.sections.forEach(function(s,si){html+=renderSec(s,si);});
+  document.getElementById('tw').innerHTML=html;
+  bindTw();
+}
+
+function saveCol(si,ci,el){cats[cur].sections[si].cols[ci].n=el.textContent.trim().replace(/^\d+\.\s*/,'');saveData();}
+function selectSym(si,yi,ci,ki){if(sel&&selSec===si&&sel.yi===yi&&sel.ci===ci&&sel.ki===ki){sel=null;selSec=null;}else{sel={yi:yi,ci:ci,ki:ki};selSec=si;}renderP2();}
+function cellMove(si,yi,ci){if(!sel||selSec!==si||(sel.yi===yi&&sel.ci===ci))return;var sec=cats[cur].sections[si];var chip=sec.years[sel.yi].cells[sel.ci].splice(sel.ki,1)[0];if(!sec.years[yi].cells[ci])sec.years[yi].cells[ci]=[];sec.years[yi].cells[ci].push(chip);sel=null;selSec=null;saveData();renderP2();}
+function delChip(si,yi,ci,ki){cats[cur].sections[si].years[yi].cells[ci].splice(ki,1);sel=null;selSec=null;saveData();renderP2();}
+function addChip(si,yi,ci){var n=prompt('토픽 입력');if(!n)return;if(!cats[cur].sections[si].years[yi].cells[ci])cats[cur].sections[si].years[yi].cells[ci]=[];cats[cur].sections[si].years[yi].cells[ci].push(n);saveData();renderP2();}
+function addCol(si){var n=prompt('열 이름');if(!n)return;var sec=cats[cur].sections[si];sec.cols.push({n:n,url:''});sec.years.forEach(function(r){r.cells.push([]);});saveData();renderP2();}
+function delCol(si,ci){if(!confirm('삭제?'))return;var sec=cats[cur].sections[si];sec.cols.splice(ci,1);sec.years.forEach(function(r){r.cells.splice(ci,1);});saveData();renderP2();}
+function addYear(si){var y=prompt("연도 (예: 21')");if(!y)return;var sec=cats[cur].sections[si];sec.years.push({y:y,cells:sec.cols.map(function(){return[];})});saveData();renderP2();}
+
+document.querySelectorAll('.cell').forEach(function(el){
+  el.addEventListener('click',function(){goCat(parseInt(this.dataset.cat));});
+});
+document.getElementById('backBtn').addEventListener('click',function(){go(1);});
+document.getElementById('ebt').addEventListener('click',function(){toggleEdit();});
+</script>
+</body>
+</html>
