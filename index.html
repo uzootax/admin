@@ -104,13 +104,50 @@ th,td{border:.5px solid #e5e5e5;}
     <span class="harrow">>></span>
     <div class="hnav" id="hnav"></div>
     <button class="ebtn" id="ebt"><i class="ti ti-edit"></i> 편집</button>
+    <button class="ebtn" id="exportBtn" style="margin-left:4px">📦 내보내기</button>
   </div>
   <div class="hint">💡 열 🔗: 열 전체 링크 / ■ 하단 파란점: 그 칸만 개별 링크 / 개별링크 없으면 열 링크 따라옴</div>
   <div class="tw" id="tw"></div>
 </div>
 
-<script>
-var STORAGE_KEY='admin_study_cats_v1';
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {getFirestore,doc,getDoc,setDoc} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+var firebaseConfig={
+  apiKey:'AIzaSyClPnElzTh0I8ZGOoMDOfWMVKKVzLS5BiQ',
+  authDomain:'uzootax.firebaseapp.com',
+  projectId:'uzootax',
+  storageBucket:'uzootax.firebasestorage.app',
+  messagingSenderId:'467976725281',
+  appId:'1:467976725281:web:f60a944f474a3362bf9460'
+};
+var app=initializeApp(firebaseConfig);
+var db=getFirestore(app);
+var DOC_REF=doc(db,'study','admin');
+
+async function loadData(){
+  try{
+    var snap=await getDoc(DOC_REF);
+    if(snap.exists())return snap.data().cats;
+  }catch(e){console.error('load error',e);}
+  return JSON.parse(JSON.stringify(DEFAULT_CATS));
+}
+
+var _tt=null;
+function showToast(m){
+  var t=document.getElementById('toast');t.textContent=m||'✓ 저장됨';t.classList.add('show');
+  if(_tt)clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show');},1800);
+}
+
+async function saveData(){
+  try{
+    await setDoc(DOC_REF,{cats:cats});
+    showToast('✓ 저장됨');
+  }catch(e){showToast('⚠ 저장실패: '+e.message);}
+}
+
+var STORAGE_KEY='admin_study_cats_v1'; // 미사용, 하위호환용
 var CC=[
   {bg:'#EFF6FF',text:'#1D4ED8',sym:'#1D4ED8'},{bg:'#F0FDF4',text:'#15803D',sym:'#15803D'},
   {bg:'#FFF7ED',text:'#C2410C',sym:'#C2410C'},{bg:'#FDF4FF',text:'#7E22CE',sym:'#7E22CE'},
@@ -230,30 +267,7 @@ var DEFAULT_CATS=[
 ];
 
 // localStorage 로드
-function loadData(){
-  try{
-    var saved=localStorage.getItem(STORAGE_KEY);
-    return saved?JSON.parse(saved):JSON.parse(JSON.stringify(DEFAULT_CATS));
-  }catch(e){return JSON.parse(JSON.stringify(DEFAULT_CATS));}
-}
-var _toastTimer=null;
-function showToast(msg){
-  var t=document.getElementById('toast');
-  t.textContent=msg||'✓ 저장됨';
-  t.classList.add('show');
-  if(_toastTimer)clearTimeout(_toastTimer);
-  _toastTimer=setTimeout(function(){t.classList.remove('show');},1500);
-}
-function saveData(){
-  try{
-    var json=JSON.stringify(cats);
-    localStorage.setItem(STORAGE_KEY,json);
-    showToast('✓ 저장됨');
-  }catch(e){
-    showToast('⚠ 저장 실패: '+e.message);
-  }
-}
-var cats=loadData();
+var cats=JSON.parse(JSON.stringify(DEFAULT_CATS));
 var cur=0,editMode=false,sel=null,selSec=null;
 
 function chipLabel(c){return typeof c==='string'?c:c.l;}
@@ -400,6 +414,25 @@ document.querySelectorAll('.cell').forEach(function(el){
 });
 document.getElementById('backBtn').addEventListener('click',function(){go(1);});
 document.getElementById('ebt').addEventListener('click',function(){toggleEdit();});
+
+function exportData(){
+  var json=JSON.stringify(cats,null,2);
+  var blob=new Blob([json],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='admin_study_data.json';
+  a.click();
+  showToast('📦 내보내기 완료');
+}
+document.getElementById('exportBtn').addEventListener('click',exportData);
+
+// ── Firebase에서 데이터 로드 후 시작 ──
+showToast('⏳ 데이터 불러오는 중...');
+loadData().then(function(data){
+  cats=data;
+  renderP2();
+  showToast('✓ 불러오기 완료');
+});
 </script>
 </body>
 </html>
