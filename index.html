@@ -129,7 +129,12 @@ var DOC_REF=doc(db,'study','admin');
 async function loadData(){
   try{
     var snap=await getDoc(DOC_REF);
-    if(snap.exists())return snap.data().cats;
+    if(snap.exists()){
+      var d=snap.data();
+      // JSON 문자열로 저장된 경우
+      if(d.catsJson)return JSON.parse(d.catsJson);
+      if(d.cats)return d.cats;
+    }
   }catch(e){console.error('load error',e);}
   return JSON.parse(JSON.stringify(DEFAULT_CATS));
 }
@@ -142,7 +147,8 @@ function showToast(m){
 
 async function saveData(){
   try{
-    await setDoc(DOC_REF,{cats:cats});
+    // 중첩배열 문제 해결: JSON 문자열로 저장
+    await setDoc(DOC_REF,{catsJson:JSON.stringify(cats)});
     showToast('✓ 저장됨');
   }catch(e){showToast('⚠ 저장실패: '+e.message);}
 }
